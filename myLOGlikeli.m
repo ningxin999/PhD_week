@@ -37,8 +37,12 @@ function Discrepancy = ErrorSum(params,Y)
         Y_forward = (5/32)*(X(:, 5).*X(:, 3).^4)./(X(:, 4).*X(:, 1).*X(:, 2).^3);
        %variance from params(:,3)
         sigma2 = params(:,3);
+
+        %determinant of the variance
+
+        logCdet = log(det(sigma2));
 		
         % calculate the Loglikelihood discrepancy
-		Discrepancy = -0.5*((Y-Y_forward))*inv(sigma2)*((Y-Y_forward))' ;
+		Discrepancy = -0.5*logCdet  -  0.5*((Y-Y_forward))*inv(sigma2)*((Y-Y_forward))' ;
 end 
 
