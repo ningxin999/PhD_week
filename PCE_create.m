@@ -14,10 +14,6 @@ metaOpts.ExpDesign.X = X_val;
 metaOpts.ExpDesign.Y = Y_val;
 %Set the maximum polynomial degree to 10:
 metaOpts.Degree = 1:10;
-% Select the sparse-favouring least-square minimization LARS for the 
-% PCE coefficients calculation strategy:
-metaopts.method = 'LARS';
-metaopts.ExpDesign.NSamples = 100;
 
 myPCE = uq_createModel(metaOpts);
 
