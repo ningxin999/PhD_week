@@ -1,5 +1,7 @@
 
-function Y = Deflection(E,delta,noisePercentage)
+function Y = Deflection(X)
+        E = X(:,1);
+        delta = X(:,2);
         rng(100,'twister')
 
         b = 0.15; % beam width  (m)
@@ -33,14 +35,16 @@ function Y = Deflection(E,delta,noisePercentage)
                 if xi <= L_a(ii,1)
                     Y(ii,jj) = F .* L_b(ii,1) .* xi ./ (6 .* L .* E(ii,1) .* I)  .* ((L.^2 - L_b(ii,1).^2) - xi.^2);
                     %measurement error                   
-                    error_scale = noisePercentage.* Y(ii,jj);                  
+                    %error_scale = noisePercentage.* Y(ii,jj); 
+                    error_scale = 0.* Y(ii,jj);
                     error = normrnd(0,error_scale);
                     Y(ii,jj) =  Y(ii,jj) + error;
     
                 else
                      Y(ii,jj) = F.*L_b(ii,1)/ (6.*L.*E(ii,1).*I) .* (L/L_b(ii,1).*(xi-L_a(ii,1)).^3 + (L.^2 - L_b(ii,1).^2).*xi - xi.^3 ); 
                     %measurement error 
-                    error_scale = noisePercentage.* Y(ii,jj);                    
+                    %error_scale = noisePercentage.* Y(ii,jj); 
+                    error_scale = 0.* Y(ii,jj);                   
                     error = normrnd(0,error_scale);  
                     Y(ii,jj) =  Y(ii,jj) + error;   
     
