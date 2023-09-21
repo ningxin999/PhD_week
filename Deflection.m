@@ -1,13 +1,13 @@
 
 function Y = Deflection(X)
-        E = X(:,1);
-        delta = X(:,2);
-        rng(100,'twister')
 
+        rng(100,'twister')
+        F = X;
         b = 0.15; % beam width  (m)
         h = 0.3; % beam height (m)
         L = 30; % beam length (m)
-        F = 43000;% Concentrated force GroundTruth (N)    
+        E = 30e9;
+        delta = -2;
         I = b.* h.^3 / 12; % the moment of intertia
 
         % loading position delta divide the beam into two part a and part b
@@ -21,7 +21,7 @@ function Y = Deflection(X)
  
 
 
-        Nsample = size(E,1);
+        Nsample = size(F,1);
         Y = zeros(Nsample,29);
 
         for ii = 1: Nsample
@@ -32,8 +32,8 @@ function Y = Deflection(X)
     
     
             %calculate deflection part A and part B
-                if xi <= L_a(ii,1)
-                    Y(ii,jj) = F .* L_b(ii,1) .* xi ./ (6 .* L .* E(ii,1) .* I)  .* ((L.^2 - L_b(ii,1).^2) - xi.^2);
+                if xi <= L_a
+                    Y(ii,jj) = F(ii,1) .* L_b .* xi ./ (6 .* L .* E .* I)  .* ((L.^2 - L_b.^2) - xi.^2);
                     %measurement error                   
                     %error_scale = noisePercentage.* Y(ii,jj); 
                     error_scale = 0.* Y(ii,jj);
@@ -41,7 +41,7 @@ function Y = Deflection(X)
                     Y(ii,jj) =  Y(ii,jj) + error;
     
                 else
-                     Y(ii,jj) = F.*L_b(ii,1)/ (6.*L.*E(ii,1).*I) .* (L/L_b(ii,1).*(xi-L_a(ii,1)).^3 + (L.^2 - L_b(ii,1).^2).*xi - xi.^3 ); 
+                     Y(ii,jj) = F(ii,1).*L_b/ (6.*L.*E.*I) .* (L/L_b.*(xi-L_a).^3 + (L.^2 - L_b.^2).*xi - xi.^3 ); 
                     %measurement error 
                     %error_scale = noisePercentage.* Y(ii,jj); 
                     error_scale = 0.* Y(ii,jj);                   

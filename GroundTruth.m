@@ -1,10 +1,9 @@
 
-function Y = GroundTruth(E,delta,N,errorPerc)
+function Y = GroundTruth(E,delta,F,N,errorPerc)
 
         b = 0.15; % beam width  (m)
         h = 0.3; % beam height (m)
-        L = 30; % beam length (m)
-        F = 43000;% Concentrated force GroundTruth (N)    
+        L = 30; % beam length (m)        
         I = b.* h.^3 / 12; % the moment of intertia
 
         % loading position delta divide the beam into two part a and part b
