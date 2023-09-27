@@ -2,6 +2,7 @@
 
 function logL = myLogLikeli2(params,y)
 
+
 %obtian the number of chain
 nchain = size(params,1);
 %get the number of the experiment
@@ -32,18 +33,20 @@ end
 
 function Discrepancy = ErrorSum(params,y)
 
-        F = params(:,1);% Loading force (N)
+        G01 = params(:,1);% G01
+        G02 = params(:,2);% G02
 
-        sigma2 = params(:,2);%discrepancy Prior
+        sigma2 = params(:,3);%discrepancy 
 
-        X_val = F;
+        X_val = [G01 G02];
+
         load('myPCE.mat');
         PCE =  uq_evalModel(myPCE,X_val);      
       
-
+        N_diagonal = size(PCE,2);
         %determinant of the variance
-        Inv_var = inv(diag(ones(1,29)*sigma2));
-        logCdet = log(det(diag(ones(29,1)*sigma2)));		
+        Inv_var = inv(diag(ones(1,N_diagonal)*sigma2));
+        logCdet = log(det(diag(ones(N_diagonal,1)*sigma2)));		
         % calculate the Loglikelihood discrepancy
 		Discrepancy = -0.5*logCdet  -  0.5*( y -PCE)*Inv_var*(y - PCE)';
 end 
