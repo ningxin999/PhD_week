@@ -39,16 +39,44 @@ function Discrepancy = ErrorSum(params,y)
         sigma2 = params(:,3);%discrepancy 
 
         X_val = [G01 G02];
+         
 
         load('myPCE.mat');
-        PCE =  uq_evalModel(myPCE,X_val);      
+        load('S.mat');
+        load('V.mat');
+        load('number.mat');
+        load('st.mat');
+        load('mv.mat');
+        
+
+        YPCE= uq_evalModel(myPCE,X_val);
+
+        %YPCE = YPCE_PCA*coeff';
+        % 
+        % 
+        % %reconstruct the output
+        
+        YPCE = YPCE * V(:, 1:number)';
+        % 逆标准化每个主成分的得分
+        for i = 1:size(YPCE, 2)
+            YPCE(:, i) = YPCE(:, i) * st(i) + mv(i);
+        end
+        
+
+
+
+
+
+
+
       
-        N_diagonal = size(PCE,2);
+        N_diagonal = size(YPCE,2);
         %determinant of the variance
         Inv_var = inv(diag(ones(1,N_diagonal)*sigma2));
         logCdet = log(det(diag(ones(N_diagonal,1)*sigma2)));		
         % calculate the Loglikelihood discrepancy
-		Discrepancy = -0.5*logCdet  -  0.5*( y -PCE)*Inv_var*(y - PCE)';
+              
+		Discrepancy = -0.5*logCdet  -  0.5*( y -YPCE)*Inv_var*(y - YPCE)';
 end 
 
 
